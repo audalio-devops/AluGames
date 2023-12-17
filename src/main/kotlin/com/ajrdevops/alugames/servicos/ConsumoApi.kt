@@ -1,11 +1,10 @@
 package com.ajrdevops.alugames.servicos
 
-import com.ajrdevops.alugames.modelo.Gamer
-import com.ajrdevops.alugames.modelo.InfoGamerJson
-import com.ajrdevops.alugames.modelo.InfoJogo
+import com.ajrdevops.alugames.modelo.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import criaGamer
+import criaJogo
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -60,6 +59,19 @@ class ConsumoApi {
 
         return (listaGamersConvertida)
 
+    }
+
+    fun buscaJogosJson(): List<Jogo> {
+        val endereco = "https://raw.githubusercontent.com/jeniblodev/arquivosJson/main/jogos.json"
+        val json = consumoDados(endereco)
+
+        val gson = Gson()
+        val meuJogoTipo = object : TypeToken<List<InfoJogoJson>>() {}.type
+        val listaJogo: List<InfoJogoJson> = gson.fromJson(json, meuJogoTipo)
+
+        val listaJogoConvertida = listaJogo.map { infoJogoJson -> infoJogoJson.criaJogo() }
+
+        return listaJogoConvertida
     }
 
 }
