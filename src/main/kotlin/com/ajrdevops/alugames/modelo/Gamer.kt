@@ -1,5 +1,6 @@
 package com.ajrdevops.alugames.modelo
 
+import formatoComDuasCasasDecimais
 import java.lang.IllegalArgumentException
 import java.time.LocalDate
 import java.util.Scanner
@@ -26,9 +27,10 @@ data class Gamer(
     val jogosBuscados = mutableListOf<Jogo?>()
     val jogosAlugados = mutableListOf<Aluguel?>()
     private val listaNotas = mutableListOf<Int>()
+    val jogosRecomendados = mutableListOf<Jogo>()
 
     override val media: Double
-        get() = listaNotas.average()
+        get() = listaNotas.average().formatoComDuasCasasDecimais()
 
     override fun recomendar(nota: Int) {
         if (nota < 1 || nota > 10) {
@@ -36,6 +38,11 @@ data class Gamer(
         } else {
             listaNotas.add(nota)
         }
+    }
+
+    fun recomendarJogo(jogo: Jogo, nota: Int){
+        jogo.recomendar(nota)
+        jogosRecomendados.add(jogo)
     }
 
     constructor(nome: String, email: String, dataNascimento:String, usuario:String):
